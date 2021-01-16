@@ -9,12 +9,18 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const app = express();
 
+//Import Routes
+const cerveRoutes = require("./routes/cerves");
+
 // environment variables
 const PORT = process.env.PORT;
 const MONGODB_URI = process.env.MONGODB_URI;
 
 // Middlewares
 app.use(bodyParser.json());
+
+// Routes
+app.use("/api/cerveceria", cerveRoutes);
 
 // Server && DB
 mongoose
