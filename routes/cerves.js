@@ -1,8 +1,10 @@
 const { Router } = require("express");
 const router = Router();
 
-router.get("/", (req, res, next) => {
-  res.send("Cervecerias API");
-});
+// Import the controllers
+const { insertCerve } = require("../controllers/cerves");
+
+// GET => "api/cerveceria/insert"
+router.post("/insert", insertCerve);
 
 module.exports = router;
