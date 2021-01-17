@@ -1,7 +1,6 @@
 const { check, body } = require("express-validator");
 const Cerveceria = require("../models/cerveceria");
 
-// Aqui estructurare todos los validators
 module.exports = {
   validName: body("name")
     .trim()
@@ -18,7 +17,7 @@ module.exports = {
     }),
   validDirection: body("direction")
     .trim()
-    .isLength({ min: 10, max: 60 })
+    .isLength({ min: 10, max: 100 })
     .withMessage("Introduzca una dirección válida."),
   validCity: body("city")
     .trim()
@@ -47,7 +46,7 @@ module.exports = {
   validTankStyle: body("tanks.*.style")
     .trim()
     .toLowerCase()
-    .isIn(["Especial", "1906"])
+    .isIn(["especial", "1906"])
     .withMessage("Introduzca un tipo de cerveza válido."),
   validTankCapacity: body("tanks.*.capacity")
     .isIn([235, 475, 950])

@@ -1,10 +1,44 @@
+// Packages
 const { Router } = require("express");
 const router = Router();
 
-// Import the controllers
-const { insertCerve } = require("../controllers/cerves");
+// Import validators
+const {
+  validName,
+  validDirection,
+  validCity,
+  validHours,
+  validTime,
+  validDay,
+  validTankStyle,
+  validTankCapacity,
+  validTankQuantity,
+  validTankPosition,
+  validComments,
+} = require("../controllers/validators");
 
-// GET => "api/cerveceria/insert"
-router.post("/insert", insertCerve);
+// Import the controllers
+const { insertCerve, getCerve } = require("../controllers/cerves");
+
+// POST => "api/cerveceria/insert"
+router.post(
+  "/insert",
+  [
+    validName,
+    validDirection,
+    validCity,
+    validHours,
+    validTime,
+    validDay,
+    validTankStyle,
+    validTankCapacity,
+    validTankQuantity,
+    validTankPosition,
+    validComments,
+  ],
+  insertCerve
+);
+
+router.get("/get", getCerve);
 
 module.exports = router;
