@@ -8,11 +8,7 @@ exports.insertCerve = async (req, res, next) => {
     openingHours,
     closingTime,
     closingDay,
-    quantity,
-    capacity,
-    position,
     comments,
-    style,
   } = req.body;
 
   const cerve = new Cerveceria({
@@ -22,20 +18,7 @@ exports.insertCerve = async (req, res, next) => {
     openingHours: openingHours,
     closingTime: closingTime,
     closingDay: closingDay,
-    tanks: [
-      {
-        style: style,
-        quantity: quantity,
-        capacity: capacity,
-        position: position,
-      },
-      {
-        style: "1906",
-        quantity: 2,
-        capacity: 235,
-        position: "Horizontales",
-      },
-    ],
+    tanks: [...req.body.tanks],
     comments: comments,
   });
 
