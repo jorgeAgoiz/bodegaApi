@@ -40,11 +40,7 @@ exports.insertCerve = async (req, res, next) => {
   }
 };
 
-exports.getCerve = async (req, res, next) => {
-  const { city, type } = req.query;
-  console.log(city);
-  console.log(type);
-
+exports.getAllCerves = async (req, res, next) => {
   try {
     const cervecerias = await Cerveceria.find();
     res.status(200).json({ message: "All results!!", result: cervecerias });
@@ -53,24 +49,39 @@ exports.getCerve = async (req, res, next) => {
   }
 };
 
+exports.getCerve = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const cerveceria = await Cerveceria.findById(id);
+    res.status(200).json({ message: "Your result.", result: cerveceria });
+  } catch (err) {
+    res.status(500).json({ message: "Error, not found.", error: err });
+  }
+};
+
+exports.updateCerve = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const updatedCerve = await Cerveceria.findByIdAndUpdate(id, req.body, {
+      useFindAndModify: false,
+      new: true,
+    });
+    res.status(200).json({ message: "Updated!!.", result: updatedCerve });
+  } catch (err) {
+    res.status(500).json({ message: "Error, not found.", error: err });
+  }
+};
+
+exports.deleteCerve = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const deletedCerve = await Cerveceria.findByIdAndDelete(id);
+    res.status(200).json({ message: "Deleted!!", deleted: deletedCerve });
+  } catch (error) {
+    res.status(500).json({ message: "Error, not found.", error: err });
+  }
+};
+
 /* Estudiar como implementar las diferentes peticiones con querys */
-
-/* EXAMPLE *******
-
-{
-  "name": "Mesón A'Lareira", 
-  "direction": "Calle de Porto Lagos, Calle Príncipe Don Juan Carlos, 7 Esquina, 28924 Alcorcón, Madrid",
-  "city": "Alcorcon",
-  "openingHours": 9,
-  "closingTime": 24,
-  "closingDay": "Ninguno",
-  "tanks": [
-      {
-          "style": "Especial",
-          "quantity": 4, 
-          "capacity": 475,
-          "position": "Verticales"
-      }
-  ],
-  "comments": "Aparcamiento en doble fila. Unos 40 metros de manguera, intentar no ir en comidas."
-} */

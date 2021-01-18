@@ -34,7 +34,7 @@ app.use("/api/cerveceria", cerveRoutes);
 
 // Server && DB
 mongoose
-  .connect(MONGODB_URI, { useNewUrlParser: true })
+  .connect(MONGODB_URI, { useNewUrlParser: true,  useUnifiedTopology: true})
   .then((result) => {
     app.listen(PORT, () => {
       console.log(`Listening in port: ${PORT}`);
