@@ -9,6 +9,9 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const app = express();
 
+// Import utils
+const { setRoles } = require("./util/autoroles");
+
 //Import Routes
 const cerveRoutes = require("./routes/cerves");
 const authRoutes = require("./routes/auth");
@@ -43,6 +46,7 @@ mongoose
   })
   .then((result) => {
     app.listen(PORT, () => {
+      setRoles();
       console.log(`Listening in port: ${PORT}`);
     });
   })
