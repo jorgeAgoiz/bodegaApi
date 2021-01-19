@@ -64,7 +64,6 @@ exports.updateCerve = async (req, res, next) => {
 
   try {
     const updatedCerve = await Cerveceria.findByIdAndUpdate(id, req.body, {
-      useFindAndModify: false,
       new: true,
     });
     res.status(200).json({ message: "Updated!!.", result: updatedCerve });
