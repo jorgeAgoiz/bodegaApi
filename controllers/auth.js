@@ -16,14 +16,34 @@ exports.signUp = async (req, res, next) => {
       password: hashPass,
     });
     if (roles) {
-       const foundRoles = await Rol.find({name: {$in: roles }});
-       newUser.roles = foundRoles.map(rol => rol._id);
+      const foundRoles = await Rol.find({ name: { $in: roles } });
+      newUser.roles = foundRoles.map((rol) => rol._id);
     } else {
-        const defaultRol = await Rol.findOne({name: "user"});
-        newUser.roles = defaultRol._id;
+      const defaultRol = await Rol.findOne({ name: "user" });
+      newUser.roles = defaultRol._id;
     }
     const savedUser = await newUser.save();
     res.status(200).json({ message: "Signed!!", user: savedUser });
+  } catch (err) {
+    res.status(500).json({ message: "Something went wrong!!", error: err });
+  }
+};
+
+// I MUST FINISH THIS CONTROLLER WITH JWT *************************************
+exports.signIn = async (req, res, next) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
+    }
+    const passEquals = await User.comparePass(password, user.password);
+    if (!passEquals) {
+      return res.status(401).json({ message: "Password must match!." });
+    }
+
+    res.status(200).json({ message: " Your user!!", user: user });
   } catch (err) {
     res.status(500).json({ message: "Something went wrong!!", error: err });
   }
