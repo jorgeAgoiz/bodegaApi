@@ -34,18 +34,20 @@ exports.insertCerve = async (req, res, next) => {
 
   try {
     const result = await cerve.save();
-    res.status(200).json({ message: "Saved!!", result });
+    return res.status(200).json({ message: "Saved!!", result });
   } catch (err) {
-    res.status(500).json({ message: "Error, not saved.", error: err });
+    return res.status(500).json({ message: "Error, not saved.", error: err });
   }
 };
 
 exports.getAllCerves = async (req, res, next) => {
   try {
     const cervecerias = await Cerveceria.find();
-    res.status(200).json({ message: "All results!!", result: cervecerias });
+    return res
+      .status(200)
+      .json({ message: "All results!!", result: cervecerias });
   } catch (error) {
-    res.status(500).json({ message: "Error, not found.", error: err });
+    return res.status(500).json({ message: "Error, not found.", error: err });
   }
 };
 
@@ -53,9 +55,11 @@ exports.getCerve = async (req, res, next) => {
   const { id } = req.params;
   try {
     const cerveceria = await Cerveceria.findById(id);
-    res.status(200).json({ message: "Your result.", result: cerveceria });
+    return res
+      .status(200)
+      .json({ message: "Your result.", result: cerveceria });
   } catch (err) {
-    res.status(500).json({ message: "Error, not found.", error: err });
+    return res.status(500).json({ message: "Error, not found.", error: err });
   }
 };
 
@@ -66,20 +70,25 @@ exports.updateCerve = async (req, res, next) => {
     const updatedCerve = await Cerveceria.findByIdAndUpdate(id, req.body, {
       new: true,
     });
-    res.status(200).json({ message: "Updated!!.", result: updatedCerve });
+    return res
+      .status(200)
+      .json({ message: "Updated!!.", result: updatedCerve });
   } catch (err) {
-    res.status(500).json({ message: "Error, not found.", error: err });
+    return res.status(500).json({ message: "Error, not found.", error: err });
   }
 };
 
+/* Esta ruta no funciona ahora mismo ***************************************** */
 exports.deleteCerve = async (req, res, next) => {
   const { id } = req.params;
-
+  console.log(id);
   try {
     const deletedCerve = await Cerveceria.findByIdAndDelete(id);
-    res.status(200).json({ message: "Deleted!!", deleted: deletedCerve });
+    return res
+      .status(200)
+      .json({ message: "Deleted!!", deleted: deletedCerve });
   } catch (error) {
-    res.status(500).json({ message: "Error, not found.", error: err });
+    return res.status(500).json({ message: "Error, not found.", error: err });
   }
 };
 

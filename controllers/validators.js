@@ -1,7 +1,9 @@
 const { check, body } = require("express-validator");
 const Cerveceria = require("../models/cerveceria");
+const User = require("../models/user");
 
 module.exports = {
+  // Cerveceria Validators ***************************
   validName: body("name")
     .trim()
     .isLength({ min: 3, max: 30 })
@@ -63,4 +65,17 @@ module.exports = {
     .trim()
     .isLength({ max: 600 })
     .withMessage("Comentario demasiado largo."),
+  validEmail: body("email") // User Validators **********************************
+    .trim()
+    .isEmail()
+    .withMessage("Introduzca un email válido.")
+    .custom((value) => {
+      return User.findOne({ email: value }).then((result) => {
+        if (result) {
+          return Promise.reject(
+            "Ya existe un usuario con el email introducido."
+          );
+        }
+      });
+    }),
 };

@@ -1,10 +1,21 @@
+// JSONWebToken
+const jwt = require("jsonwebtoken");
+const SECRET = process.env.SECRET;
+
 // Import Models
 const User = require("../models/user");
 const Rol = require("../models/roles");
 
+//Import validators
+const { validationResult } = require("express-validator");
+
 // Controller
 
 exports.signUp = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(500).json({ message: "Something went wrong", errors });
+  }
   const { email, password, roles } = req.body;
   try {
     const user = await User.findOne({ email: email });
@@ -23,9 +34,16 @@ exports.signUp = async (req, res, next) => {
       newUser.roles = defaultRol._id;
     }
     const savedUser = await newUser.save();
-    res.status(200).json({ message: "Signed!!", user: savedUser });
+
+    const token = jwt.sign({ id: savedUser._id }, SECRET, {
+      expiresIn: 14400,
+    });
+
+    return res.status(200).json({ message: "Signed!!", token: token });
   } catch (err) {
-    res.status(500).json({ message: "Something went wrong!!", error: err });
+    return res
+      .status(500)
+      .json({ message: "Something went wrong!!", error: err });
   }
 };
 
@@ -34,17 +52,23 @@ exports.signIn = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({ email: email }).populate("roles");
     if (!user) {
-      return res.status(401).json({ message: "User not found" });
+      return res.status(400).json({ message: "User not found" });
     }
     const passEquals = await User.comparePass(password, user.password);
     if (!passEquals) {
       return res.status(401).json({ message: "Password must match!." });
     }
 
-    res.status(200).json({ message: " Your user!!", user: user });
+    const token = jwt.sign({ id: user._id }, SECRET, {
+      expiresIn: 14400,
+    });
+
+    return res.status(200).json({ message: " Your user!!", token: token });
   } catch (err) {
-    res.status(500).json({ message: "Something went wrong!!", error: err });
+    return res
+      .status(500)
+      .json({ message: "Something went wrong!!", error: err });
   }
 };
