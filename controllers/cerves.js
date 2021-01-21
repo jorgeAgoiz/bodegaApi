@@ -103,8 +103,3 @@ exports.deleteCerve = async (req, res, next) => {
     return res.status(500).json({ message: "Error, not found.", error: err });
   }
 };
-
-/*
-  => Implementar un buen manejo de errores
-  => Usar JSDoc para la documentacion de la API
-   */

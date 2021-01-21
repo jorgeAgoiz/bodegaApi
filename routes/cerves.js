@@ -9,7 +9,6 @@ const {
   isAdmin,
   isUser,
 } = require("../middlewares/authJwt");
-const {} = require("../middlewares/verifySignup");
 
 // Import validators
 const {

@@ -3,8 +3,7 @@ const { Router } = require("express");
 const router = Router();
 
 /* // Middlewares
-const { verifyToken } = require("../middlewares/authJwt");
-const { } = require("../middlewares/verifySignup"); */
+const { verifyToken } = require("../middlewares/authJwt"); */
 
 // Import controllers
 const { signUp, signIn } = require("../controllers/auth");

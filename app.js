@@ -57,4 +57,10 @@ mongoose
     console.log(err);
   });
 
-// Implementar multer para subir imagenes ***************************
+/*
+  *********************************************************************
+  => Implementar un buen manejo de errores
+  => Usar JSDoc para la documentacion de la API
+  => Implementar multer para subir imagenes
+  *********************************************************************
+   */
