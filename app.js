@@ -57,4 +57,4 @@ mongoose
     console.log(err);
   });
 
-// MUST IMPLEMENT A GOOD HANDLING ERRORS AND ADJUST ALL STATUS CODES ***************************
+// Implementar multer para subir imagenes ***************************
