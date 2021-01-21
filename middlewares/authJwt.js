@@ -24,13 +24,10 @@ exports.verifyToken = async (req, res, next) => {
   }
 };
 
-/* Terminar de ajustar los roles */
-
 exports.isModerator = async (req, res, next) => {
   try {
     const user = await User.findById(req.userId);
     const roles = await Rol.find({ _id: { $in: user.roles } });
-    console.log(roles);
 
     for (let i = 0; i < roles.length; i++) {
       if (roles[i].name === "moderator") {
@@ -59,6 +56,25 @@ exports.isAdmin = async (req, res, next) => {
     }
 
     return res.status(403).json({ message: "Require Admin role." });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+exports.isUser = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.userId);
+    const roles = await Rol.find({ _id: { $in: user.roles } });
+    console.log(roles);
+
+    for (let i = 0; i < roles.length; i++) {
+      if (roles[i].name === "user") {
+        next();
+        return;
+      }
+    }
+
+    return res.status(403).json({ message: "Require user role." });
   } catch (err) {
     console.log(err);
   }

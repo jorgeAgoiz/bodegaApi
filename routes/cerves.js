@@ -3,7 +3,12 @@ const { Router } = require("express");
 const router = Router();
 
 // Middlewares
-const { verifyToken, isModerator, isAdmin } = require("../middlewares/authJwt");
+const {
+  verifyToken,
+  isModerator,
+  isAdmin,
+  isUser,
+} = require("../middlewares/authJwt");
 const {} = require("../middlewares/verifySignup");
 
 // Import validators
@@ -32,7 +37,7 @@ const {
 
 // POST => "api/cerveceria/insert"
 router.post(
-  "/insert",
+  "/",
   [
     validName,
     validDirection,
@@ -51,14 +56,42 @@ router.post(
   insertCerve
 );
 
-router.get("/get", verifyToken, getAllCerves);
+router.get("/", [verifyToken, isUser], getCerve);
 
-router.get("/get/:id", verifyToken, getCerve);
+router.put(
+  "/:id",
+  [
+    validName,
+    validDirection,
+    validCity,
+    validHours,
+    validTime,
+    validDay,
+    validTankStyle,
+    validTankCapacity,
+    validTankQuantity,
+    validTankPosition,
+    validComments,
+    verifyToken,
+    isModerator,
+  ],
+  updateCerve
+);
 
-router.put("/updateById/:id", [verifyToken, isModerator], updateCerve);
-
-router.delete("/deleteById/:id", [verifyToken, isAdmin], deleteCerve);
+router.delete("/:id", [verifyToken, isAdmin], deleteCerve);
 
 module.exports = router;
 
-/* Terminar de implementar los ROLES para las rutas */
+/* Roles para las rutas terminados 
+  User => GET, GET/:ID
+  Moderator => GET, GET/:ID, /PUT, /POST
+  Admin => GET, GET/:ID, /PUT, /POST, DELETE
+*/
+
+/* 
+POST => http://localhost:3000/api/cerveceria/
+GET => http://localhost:3000/api/cerveceria/
+GET => http://localhost:3000/api/cerveceria/:id
+PUT => http://localhost:3000/api/cerveceria/:id
+DELETE => http://localhost:3000/api/cerveceria/:id
+*/
