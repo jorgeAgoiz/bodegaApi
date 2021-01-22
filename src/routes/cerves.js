@@ -82,15 +82,14 @@ router.delete("/:id", [verifyToken, isAdmin], deleteCerve);
 module.exports = router;
 
 /* Roles para las rutas terminados 
-  User => GET, GET/:ID
-  Moderator => GET, GET/:ID, /PUT, /POST
-  Admin => GET, GET/:ID, /PUT, /POST, DELETE
+  User => GET,
+  Moderator => GET,, /PUT, /POST
+  Admin => GET, /PUT, /POST, DELETE
 */
 
 /* 
 POST => http://localhost:3000/api/cerveceria/
 GET => http://localhost:3000/api/cerveceria/
-GET => http://localhost:3000/api/cerveceria/:id
 PUT => http://localhost:3000/api/cerveceria/:id
 DELETE => http://localhost:3000/api/cerveceria/:id
 */
