@@ -10,23 +10,24 @@ exports.insertCerve = async (req, res, next) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ message: errors });
   }
-
   try {
     const {
       name,
       direction,
       city,
+      telephone,
       openingHours,
       closingTime,
       closingDay,
       comments,
     } = req.body;
     const tanks = [...req.body.tanks];
-
+    // Aqui implementaremos la subida de imagenes, cuando tengamos un front end diseñado.************************************
     const cerve = new Cerveceria({
       name: name,
       direction: direction,
       city: city,
+      telephone: telephone,
       openingHours: openingHours,
       closingTime: closingTime,
       closingDay: closingDay,

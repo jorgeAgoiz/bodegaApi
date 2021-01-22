@@ -16,6 +16,10 @@ const cerveSchema = new Schema(
       type: String,
       required: true,
     },
+    telephone: {
+      type: String,
+      required: false,
+    },
     openingHours: {
       type: Number,
       required: true,

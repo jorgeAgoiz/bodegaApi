@@ -6,8 +6,11 @@ if (process.env.NODE_ENV !== "production") {
 // Packages
 const express = require("express");
 const bodyParser = require("body-parser");
+const path = require("path");
 const mongoose = require("mongoose");
 const app = express();
+const multer = require("multer");
+const { v4: uuidv4 } = require("uuid");
 
 // Import utils
 const { setRoles } = require("./util/autoroles");
@@ -20,9 +23,34 @@ const authRoutes = require("./routes/auth");
 const PORT = process.env.PORT;
 const MONGODB_URI = process.env.MONGODB_URI;
 
+// Multer Options
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "images");
+  },
+  filename: (req, file, cb) => {
+    cb(null, uuidv4() + " " + file.originalname);
+  },
+});
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpg" ||
+    file.mimetype === "image/jpeg"
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
 // Middlewares
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(
+  multer({ storage: fileStorage, fileFilter: fileFilter }).single("image")
+);
+app.use("/images", express.static(path.join(__dirname, "images")));
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(

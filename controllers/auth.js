@@ -39,7 +39,7 @@ exports.signUp = async (req, res, next) => {
       expiresIn: 14400,
     });
 
-    return res.status(200).json({ message: "Signed!!", token: token });
+    return res.status(201).json({ message: "User created!", token: token });
   } catch (err) {
     return res
       .status(500)
@@ -47,10 +47,12 @@ exports.signUp = async (req, res, next) => {
   }
 };
 
-// I MUST FINISH THIS CONTROLLER WITH JWT *************************************
 exports.signIn = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(500).json({ message: "Something went wrong", errors });
+  }
   const { email, password } = req.body;
-
   try {
     const user = await User.findOne({ email: email }).populate("roles");
     if (!user) {
