@@ -1,9 +1,9 @@
-// Set the environment variables
+// ***************************************** Set the environment variables
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 
-// Packages
+// ************************************************************* Packages
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
@@ -12,24 +12,25 @@ const app = express();
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
 
-// Import utils
+// ********************************************************* Import utils
 const { setRoles } = require("./util/autoroles");
 
 //Import Routes
 const cerveRoutes = require("./routes/cerves");
 const authRoutes = require("./routes/auth");
+// ************************************************* Environment variables
 /**
  * Environment variable with the PORT of server
- * @constant {number} PORT
+ * @constant {number}
  */
 const PORT = process.env.PORT;
 /**
  * Environment variable with URL MongoDB
- * @constant {String} MONGODB_URI Database
+ * @constant {String}
  */
 const MONGODB_URI = process.env.MONGODB_URI;
 
-// Multer Options
+// ******************************************************* Multer Options
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "images");
@@ -50,7 +51,7 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-// Middlewares
+// ***************************************************** Middlewares
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
@@ -70,11 +71,11 @@ app.use((req, res, next) => {
   next();
 });
 
-// Routes
+// ****************************************************** Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/cerveceria", cerveRoutes);
 
-// Server && DB
+// ************************************************ Server && DB
 mongoose
   .connect(MONGODB_URI, {
     useNewUrlParser: true,

@@ -19,7 +19,7 @@ exports.signUp = async (req, res, next) => {
   const { email, password, roles } = req.body;
   try {
     const user = await User.findOne({ email: email });
-    if (user) return res.status(500).json({ message: "Email bussy.", email });
+    if (user) return res.status(401).json({ message: "Email bussy.", email });
 
     const hashPass = await User.encryptPass(password);
     const newUser = new User({
