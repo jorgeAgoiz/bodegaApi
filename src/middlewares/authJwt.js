@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const Rol = require("../models/roles");
 
+// To verify the JSON Web Token
 exports.verifyToken = async (req, res, next) => {
   try {
     const token = req.headers["x-access-token"];
@@ -24,6 +25,7 @@ exports.verifyToken = async (req, res, next) => {
   }
 };
 
+// To chek moderator role
 exports.isModerator = async (req, res, next) => {
   try {
     const user = await User.findById(req.userId);
@@ -39,9 +41,13 @@ exports.isModerator = async (req, res, next) => {
     return res.status(403).json({ message: "Require moderator role." });
   } catch (err) {
     console.log(err);
+    return res
+      .status(500)
+      .json({ message: "Something went wrong.", error: err });
   }
 };
 
+// To check admin role
 exports.isAdmin = async (req, res, next) => {
   try {
     const user = await User.findById(req.userId);
@@ -58,9 +64,13 @@ exports.isAdmin = async (req, res, next) => {
     return res.status(403).json({ message: "Require Admin role." });
   } catch (err) {
     console.log(err);
+    return res
+      .status(500)
+      .json({ message: "Something went wrong.", error: err });
   }
 };
 
+// To check user role
 exports.isUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.userId);
@@ -77,5 +87,8 @@ exports.isUser = async (req, res, next) => {
     return res.status(403).json({ message: "Require user role." });
   } catch (err) {
     console.log(err);
+    return res
+      .status(500)
+      .json({ message: "Something went wrong.", error: err });
   }
 };

@@ -1,6 +1,6 @@
 // ********************************************** Import Rol Model
 const Rol = require("../models/roles");
-
+// To set automatically roles, if are not defined in DB.
 exports.setRoles = async (req, res, next) => {
   try {
     const count = await Rol.estimatedDocumentCount();

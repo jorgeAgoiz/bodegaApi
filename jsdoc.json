@@ -6,6 +6,9 @@
         "excludePattern": "(node_modules|docs)"
     },
     "templates": {
+        "default": {
+            "outputSourceFiles": false
+        },
         "cleverLinks": false,
         "monospaceLinks": false
     },

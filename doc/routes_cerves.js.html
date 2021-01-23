@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>routes/cerves.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Auth_routes.html">Auth_routes</a></li><li><a href="module-Cerveceria_Routes.html">Cerveceria_Routes</a></li></ul><h3>Global</h3><ul><li><a href="global.html#MONGODB_URI">MONGODB_URI</a></li><li><a href="global.html#PORT">PORT</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">routes/cerves.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Cervecerias Routes
+ * @module Cerveceria_Routes
+ */
+// ************************************** Packages
+const { Router } = require("express");
+const router = Router();
+
+// *********************************** Middlewares
+const {
+  verifyToken,
+  isModerator,
+  isAdmin,
+  isUser,
+} = require("../middlewares/authJwt");
+
+// ***************************** Import validators
+const {
+  validName,
+  validDirection,
+  validCity,
+  validHours,
+  validTime,
+  validDay,
+  validTankStyle,
+  validTankCapacity,
+  validTankQuantity,
+  validTankPosition,
+  validComments,
+} = require("../controllers/validators");
+
+// ************************ Import the controllers
+const {
+  insertCerve,
+  getCerve,
+  updateCerve,
+  deleteCerve,
+  getAllCerves,
+} = require("../controllers/cerves");
+
+// ****************** POST => "api/cerveceria/insert"
+/**
+ * Insert Cerveceria Route
+ * @name INSERT
+ * @path {POST} /api/cerveceria/insert
+ * @header x-access-token - Token provided to get the authorization.
+ * @body {String} name - Name of local.
+ * @body {String} direction - Direction of local.
+ * @body {String} city - City of local.
+ * @body {String} [telephone] - Telephone number of local.
+ * @body {String} openingHours - Opening hour of local.
+ * @body {String} closingTime - Closing time of local.
+ * @body {String} closingDay - Closing day of local.
+ * @body {String} [comments] - Comments about this local.
+ * @body {Object[]} tanks - Information about the installation of the local inside a tanks Object Type.
+ * @body {String[]} [picturesUrl] - Photos of the local.
+ * @code {201} if the cerveceria is created.
+ * @code {400} if yo have validation errors or something wen wrong.
+ * @code {500} if not satisfactory and something went wrong.
+ * @response {String} message "Saved!!".
+ * @response {Object} result - Record of created object.
+ */
+router.post(
+  "/",
+  [
+    validName,
+    validDirection,
+    validCity,
+    validHours,
+    validTime,
+    validDay,
+    validTankStyle,
+    validTankCapacity,
+    validTankQuantity,
+    validTankPosition,
+    validComments,
+    verifyToken,
+    isModerator,
+  ],
+  insertCerve
+);
+
+// ****************** GET => "api/cerveceria/"
+/**
+ * Get Cervecerias Route
+ * @name GET
+ * @path {GET} /api/cerveceria/
+ * @header x-access-token - Token provided to get the authorization.
+ * @query {String} [id] - Id of the local.
+ * @query {String} [openHour] - Opening time of the locals.
+ * @query {String} [closingDay] - Closing day of the locals.
+ * @query {String} [city] - City of the locals.
+ * @code {200} if the request is successful and have results.
+ * @code {404} if not found results.
+ * @code {500} if not satisfactory and something went wrong.
+ * @response {String} message "Your result.".
+ * @response {Object[]} result - Requested records.
+ */
+router.get("/", [verifyToken, isUser], getCerve);
+
+// ***************************** PUT => "api/cerveceria/"
+/**
+ * Update Cerveceria Route
+ * @name PUT
+ * @path {PUT} /api/cerveceria/
+ * @header x-access-token - Token provided to get the authorization.
+ * @body {String} name - Name of local.
+ * @body {String} direction - Direction of local.
+ * @body {String} city - City of local.
+ * @body {String} [telephone] - Telephone number of local.
+ * @body {String} openingHours - Opening hour of local.
+ * @body {String} closingTime - Closing time of local.
+ * @body {String} closingDay - Closing day of local.
+ * @body {String} [comments] - Comments about this local.
+ * @body {Object[]} tanks - Information about the installation of the local inside a tanks Object Type.
+ * @body {String[]} [picturesUrl] - Photos of the local.
+ * @code {201} if the cerveceria is updated.
+ * @code {400} if yo have validation errors.
+ * @code {404} if not found the record.
+ * @code {500} if not satisfactory and something went wrong.
+ * @response {String} message "Updated!!".
+ * @response {Object} result - Record updated.
+ */
+router.put(
+  "/:id",
+  [
+    validName,
+    validDirection,
+    validCity,
+    validHours,
+    validTime,
+    validDay,
+    validTankStyle,
+    validTankCapacity,
+    validTankQuantity,
+    validTankPosition,
+    validComments,
+    verifyToken,
+    isModerator,
+  ],
+  updateCerve
+);
+
+// ****************** DELETE => "api/cerveceria/"
+/**
+ * Delete Cerveceria Route
+ * @name DELETE
+ * @path {DELETE} /api/cerveceria/
+ * @header x-access-token - Token provided to get the authorization.
+ * @query {String} [id] - Id of the local.
+ * @code {200} if the request is successful and the record has been deleted.
+ * @code {404} if not found results.
+ * @code {500} if not satisfactory and something went wrong.
+ * @response {String} message "Deleted!!".
+ * @response {Object[]} deleted - Record deleted.
+ */
+router.delete("/:id", [verifyToken, isAdmin], deleteCerve);
+
+module.exports = router;
+
+/* Roles para las rutas terminados 
+  User => GET,
+  Moderator => GET,, /PUT, /POST
+  Admin => GET, /PUT, /POST, DELETE
+*/
+
+// **************************************** TYPE DEFINITIONS
+/**
+ * @typedef tanks
+ * @type {Object}
+ * @property {String} style - Type of beer.
+ * @property {Number} quantity - Quantity of tanks.
+ * @property {Number} capacity - Capacity of tanks.
+ * @property {String} position - position of tanks.
+ */
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Sat Jan 23 2021 11:45:21 GMT+0100 (GMT+01:00) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>

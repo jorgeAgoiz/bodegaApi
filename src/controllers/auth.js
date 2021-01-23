@@ -1,16 +1,15 @@
-// JSONWebToken
+// ********************************************* JSONWebToken
 const jwt = require("jsonwebtoken");
 const SECRET = process.env.SECRET;
 
-// Import Models
+// ******************************************* Import Models
 const User = require("../models/user");
 const Rol = require("../models/roles");
 
-//Import validators
+// *************************************** Import validators
 const { validationResult } = require("express-validator");
 
-// Controller
-
+// ********************************************* Controllers
 exports.signUp = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

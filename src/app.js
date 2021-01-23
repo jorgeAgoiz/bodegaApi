@@ -19,15 +19,7 @@ const { setRoles } = require("./util/autoroles");
 const cerveRoutes = require("./routes/cerves");
 const authRoutes = require("./routes/auth");
 // ************************************************* Environment variables
-/**
- * Environment variable with the PORT of server
- * @constant {number}
- */
 const PORT = process.env.PORT;
-/**
- * Environment variable with URL MongoDB
- * @constant {String}
- */
 const MONGODB_URI = process.env.MONGODB_URI;
 
 // ******************************************************* Multer Options
@@ -84,7 +76,7 @@ mongoose
   })
   .then((result) => {
     app.listen(PORT, () => {
-      setRoles();
+      setRoles(); // From "./util/autoroles,js"
       console.log(`Listening in port: ${PORT}`);
     });
   })
@@ -94,7 +86,6 @@ mongoose
 
 /*
   *********************************************************************
-  => Usar JSDoc para la documentacion de la API
   => Implementar multer para subir imagenes
   *********************************************************************
-   */
+  */

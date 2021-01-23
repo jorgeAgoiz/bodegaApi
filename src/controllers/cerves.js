@@ -1,10 +1,10 @@
-// Import the validator
+// ******************************** Import the validator
 const { validationResult } = require("express-validator");
 
-// Import the model
+// ******************************** Import the model
 const Cerveceria = require("../models/cerveceria");
 
-// POST => "/api/cerveceria" para crear una cerveceria.
+// ******************************** POST => "/api/cerveceria" para crear una cerveceria.
 exports.insertCerve = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -42,7 +42,7 @@ exports.insertCerve = async (req, res, next) => {
   }
 };
 
-// GET => "/api/cerveceria" para obtener cervecerias.
+// ******************************** GET => "/api/cerveceria" para obtener cervecerias.
 exports.getCerve = async (req, res, next) => {
   try {
     const { id, city, openHour, closingDay } = req.query;
@@ -62,41 +62,49 @@ exports.getCerve = async (req, res, next) => {
 
     const cerveceria = await Cerveceria.find(query);
     if (!cerveceria) {
-      throw new Error();
+      return res.status(404).json({ message: "Error, not found.", error: err });
     }
     return res
       .status(200)
       .json({ message: "Your result.", result: cerveceria });
   } catch (err) {
-    return res.status(500).json({ message: "Error, not found.", error: err });
+    return res
+      .status(500)
+      .json({ message: "Error, something went wrong.", error: err });
   }
 };
 
-// PUT => "/api/cerveceria" para actualizar una cerveceria.
+// ************************************ PUT => "/api/cerveceria" para actualizar una cerveceria.
 exports.updateCerve = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ message: errors });
   }
-  const { id } = req.params;
+  const { id } = req.query;
   try {
     const updatedCerve = await Cerveceria.findByIdAndUpdate(id, req.body, {
       new: true,
     });
+    if (!updatedCerve) {
+      return res.status(404).json({ message: "Error, not found.", error: err });
+    }
     return res
-      .status(200)
+      .status(201)
       .json({ message: "Updated!!.", result: updatedCerve });
   } catch (err) {
     return res.status(500).json({ message: "Error, not found.", error: err });
   }
 };
 
-// DELETE => "/api/cerveceria" para eliminar una cerveceria.
+// ************************************* DELETE => "/api/cerveceria" para eliminar una cerveceria.
 exports.deleteCerve = async (req, res, next) => {
-  const { id } = req.params;
+  const { id } = req.query;
   console.log(id);
   try {
     const deletedCerve = await Cerveceria.findByIdAndDelete(id);
+    if (!deletedCerve) {
+      return res.status(404).json({ message: "Error, not found.", error: err });
+    }
     return res
       .status(200)
       .json({ message: "Deleted!!", deleted: deletedCerve });
