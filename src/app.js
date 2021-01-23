@@ -5,6 +5,7 @@ if (process.env.NODE_ENV !== "production") {
 
 // ************************************************************* Packages
 const express = require("express");
+const helmet = require("helmet");
 const bodyParser = require("body-parser");
 const path = require("path");
 const mongoose = require("mongoose");
@@ -46,6 +47,7 @@ const fileFilter = (req, file, cb) => {
 // ***************************************************** Middlewares
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(helmet());
 app.use(
   multer({ storage: fileStorage, fileFilter: fileFilter }).single("image")
 );

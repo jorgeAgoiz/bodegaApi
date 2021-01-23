@@ -34,11 +34,7 @@ exports.signUp = async (req, res, next) => {
     }
     const savedUser = await newUser.save();
 
-    const token = jwt.sign({ id: savedUser._id }, SECRET, {
-      expiresIn: 14400,
-    });
-
-    return res.status(201).json({ message: "User created!", token: token });
+    return res.status(201).json({ message: "User created!" });
   } catch (err) {
     return res
       .status(500)

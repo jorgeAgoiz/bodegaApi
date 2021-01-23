@@ -37,7 +37,6 @@ exports.isModerator = async (req, res, next) => {
         return;
       }
     }
-
     return res.status(403).json({ message: "Require moderator role." });
   } catch (err) {
     console.log(err);
@@ -52,7 +51,6 @@ exports.isAdmin = async (req, res, next) => {
   try {
     const user = await User.findById(req.userId);
     const roles = await Rol.find({ _id: { $in: user.roles } });
-    console.log(roles);
 
     for (let i = 0; i < roles.length; i++) {
       if (roles[i].name === "admin") {
@@ -60,7 +58,6 @@ exports.isAdmin = async (req, res, next) => {
         return;
       }
     }
-
     return res.status(403).json({ message: "Require Admin role." });
   } catch (err) {
     console.log(err);
@@ -75,7 +72,6 @@ exports.isUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.userId);
     const roles = await Rol.find({ _id: { $in: user.roles } });
-    console.log(roles);
 
     for (let i = 0; i < roles.length; i++) {
       if (roles[i].name === "user") {
@@ -83,7 +79,6 @@ exports.isUser = async (req, res, next) => {
         return;
       }
     }
-
     return res.status(403).json({ message: "Require user role." });
   } catch (err) {
     console.log(err);
