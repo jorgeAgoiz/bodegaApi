@@ -12,6 +12,8 @@ const mongoose = require("mongoose");
 const app = express();
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
+const multerS3 = require("multer-s3");
+const aws = require("aws-sdk");
 
 // ********************************************************* Import utils
 const { setRoles } = require("./util/autoroles");
