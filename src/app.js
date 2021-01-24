@@ -26,10 +26,10 @@ const MONGODB_URI = process.env.MONGODB_URI;
 // ******************************************************* Multer Options
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "images");
+    cb(null, "src/images");
   },
   filename: (req, file, cb) => {
-    cb(null, uuidv4() + " " + file.originalname);
+    cb(null, uuidv4() + "-" + file.originalname);
   },
 });
 const fileFilter = (req, file, cb) => {
@@ -46,12 +46,12 @@ const fileFilter = (req, file, cb) => {
 
 // ***************************************************** Middlewares
 app.use(bodyParser.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet());
 app.use(
-  multer({ storage: fileStorage, fileFilter: fileFilter }).single("image")
+  multer({ storage: fileStorage, fileFilter: fileFilter }).array("images", 3)
 );
-app.use("/images", express.static(path.join(__dirname, "images")));
+// app.use("/images", express.static(path.join(__dirname, "images")));
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(

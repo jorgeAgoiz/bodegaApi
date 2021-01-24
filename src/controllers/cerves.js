@@ -11,6 +11,7 @@ exports.insertCerve = async (req, res, next) => {
     return res.status(400).json({ message: errors });
   }
   try {
+    let images = [];
     const {
       name,
       direction,
@@ -22,8 +23,14 @@ exports.insertCerve = async (req, res, next) => {
       comments,
     } = req.body;
     const tanks = [...req.body.tanks];
+    let pictures = req.files;
+    for (let pic of pictures) {
+      images.push(pic.path.replace(/\\/g, "/"));
+    }
+    console.log(images);
     // Aqui implementaremos la subida de imagenes, cuando tengamos un front end diseñado.************************************
     const cerve = new Cerveceria({
+      picturesUrl: images,
       name: name,
       direction: direction,
       city: city,
