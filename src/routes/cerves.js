@@ -131,6 +131,7 @@ router.get("/", [verifyToken, isUser], getCerve);
  * @code {201} Created. The cerveceria is updated.
  * @code {400} Bad Request. You have not passed the validations.
  * @code {404} Not Found. No results found.
+ * @code {422} Unprocessable Entity. Not suported extension files to upload.
  * @code {500} Internal Server Error. Something went wrong.
  * @response {String} message "Updated!!".
  * @response {Object} result - Record updated.
@@ -138,6 +139,16 @@ router.get("/", [verifyToken, isUser], getCerve);
 router.put(
   "/",
   [
+    function (req, res, next) {
+      upload(req, res, function (err) {
+        if (err) {
+          return res.status(422).json({
+            error: err.message,
+          });
+        }
+        next();
+      });
+    },
     validName,
     validDirection,
     validCity,

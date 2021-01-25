@@ -24,9 +24,11 @@ exports.insertCerve = async (req, res, next) => {
       comments,
     } = req.body;
     const tanks = [...req.body.tanks];
-    let pictures = req.files;
-    for (let pic of pictures) {
-      images.push(pic.location);
+    if (req.files) {
+      let pictures = req.files;
+      for (let pic of pictures) {
+        images.push(pic.location);
+      }
     }
     const cerve = new Cerveceria({
       picturesUrl: images,
@@ -88,7 +90,38 @@ exports.updateCerve = async (req, res, next) => {
   }
   const { id } = req.query;
   try {
-    const updatedCerve = await Cerveceria.findByIdAndUpdate(id, req.body, {
+    let images = [];
+    const {
+      name,
+      direction,
+      city,
+      telephone,
+      openingHours,
+      closingTime,
+      closingDay,
+      comments,
+    } = req.body;
+    const tanks = [...req.body.tanks];
+    if (req.files) {
+      let pictures = req.files;
+      for (let pic of pictures) {
+        images.push(pic.location);
+      }
+    }
+    const cerve = {
+      picturesUrl: images,
+      name: name,
+      direction: direction,
+      city: city,
+      telephone: telephone,
+      openingHours: openingHours,
+      closingTime: closingTime,
+      closingDay: closingDay,
+      tanks: tanks,
+      comments: comments,
+    };
+
+    const updatedCerve = await Cerveceria.findByIdAndUpdate(id, cerve, {
       new: true,
     });
     if (!updatedCerve) {
