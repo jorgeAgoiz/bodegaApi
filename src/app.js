@@ -10,10 +10,6 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const mongoose = require("mongoose");
 const app = express();
-const multer = require("multer");
-const { v4: uuidv4 } = require("uuid");
-const multerS3 = require("multer-s3");
-const aws = require("aws-sdk");
 
 // ********************************************************* Import utils
 const { setRoles } = require("./util/autoroles");
@@ -25,34 +21,10 @@ const authRoutes = require("./routes/auth");
 const PORT = process.env.PORT;
 const MONGODB_URI = process.env.MONGODB_URI;
 
-// ******************************************************* Multer Options
-const fileStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "src/images");
-  },
-  filename: (req, file, cb) => {
-    cb(null, uuidv4() + "-" + file.originalname);
-  },
-});
-const fileFilter = (req, file, cb) => {
-  if (
-    file.mimetype === "image/png" ||
-    file.mimetype === "image/jpg" ||
-    file.mimetype === "image/jpeg"
-  ) {
-    cb(null, true);
-  } else {
-    cb(null, false);
-  }
-};
-
 // ***************************************************** Middlewares
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet());
-app.use(
-  multer({ storage: fileStorage, fileFilter: fileFilter }).array("images", 3)
-);
 // app.use("/images", express.static(path.join(__dirname, "images")));
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");

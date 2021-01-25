@@ -35,14 +35,13 @@ const {
   getCerve,
   updateCerve,
   deleteCerve,
-  getAllCerves,
 } = require("../controllers/cerves");
 
-// ****************** POST => "api/cerveceria/insert"
+// ****************** POST => "api/cerveceria/"
 /**
  * Insert Cerveceria Route
  * @name INSERT
- * @path {POST} /api/cerveceria/insert
+ * @path {POST} /api/cerveceria/
  * @header x-access-token - Token provided to get the authorization.
  * @body {String} name - Cerveceria´s Name.
  * @body {String} direction - Cerveceria´s Direction.
@@ -104,6 +103,7 @@ router.get("/", [verifyToken, isUser], getCerve);
  * @name PUT
  * @path {PUT} /api/cerveceria/
  * @header x-access-token - Token provided to get the authorization.
+ * @query {String} [id] - Cerveceria´s Id.
  * @body {String} name - Cerveceria´s Name.
  * @body {String} direction - Cerveceria´s Direction.
  * @body {String} city - Cerveceria´s City.
@@ -122,7 +122,7 @@ router.get("/", [verifyToken, isUser], getCerve);
  * @response {Object} result - Record updated.
  */
 router.put(
-  "/:id",
+  "/",
   [
     validName,
     validDirection,
@@ -154,7 +154,7 @@ router.put(
  * @response {String} message "Deleted!!".
  * @response {Object[]} deleted - Record deleted.
  */
-router.delete("/:id", [verifyToken, isAdmin], deleteCerve);
+router.delete("/", [verifyToken, isAdmin], deleteCerve);
 
 module.exports = router;
 
