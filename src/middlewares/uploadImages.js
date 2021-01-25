@@ -16,7 +16,7 @@ const fileFilter = (req, file, cb) => {
   ) {
     cb(null, true);
   } else {
-    cb(new Error("Invalid Mime Type MotherFucker!!"), false);
+    cb(new Error("Invalid Mime Type"), false);
   }
 };
 

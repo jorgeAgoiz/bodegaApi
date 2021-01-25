@@ -5,6 +5,9 @@
 // ************************************** Packages
 const { Router } = require("express");
 const router = Router();
+// Upload images Middleware
+const { multerS3 } = require("../middlewares/uploadImages");
+const upload = multerS3.array("images", 4);
 
 // *********************************** Middlewares
 const {
@@ -40,7 +43,7 @@ const {
 // ****************** POST => "api/cerveceria/"
 /**
  * Insert Cerveceria Route
- * @name INSERT
+ * @name POST
  * @path {POST} /api/cerveceria/
  * @header x-access-token - Token provided to get the authorization.
  * @body {String} name - Cerveceria´s Name.
@@ -55,6 +58,7 @@ const {
  * @body {String[]} [picturesUrl] - Cerveceria´s Photos.
  * @code {201} Created. The cerveceria is updated.
  * @code {400} Bad Request. You have not passed the validations.
+ * @code {422} Unprocessable Entity. Not suported extension files to upload.
  * @code {500} Internal Server Error. Something went wrong.
  * @response {String} message "Saved!!".
  * @response {Object} result - Record of created object.
@@ -62,6 +66,16 @@ const {
 router.post(
   "/",
   [
+    function (req, res, next) {
+      upload(req, res, function (err) {
+        if (err) {
+          return res.status(422).json({
+            error: err.message,
+          });
+        }
+        next();
+      });
+    },
     validName,
     validDirection,
     validCity,

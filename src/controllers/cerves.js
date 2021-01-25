@@ -1,10 +1,6 @@
 // ******************************** Import the validator
 const { validationResult } = require("express-validator");
 
-// Upload images Middleware
-const { multerS3 } = require("../middlewares/uploadImages");
-const upload = multerS3.array("images", 4);
-
 // ******************************** Import the model
 const Cerveceria = require("../models/cerveceria");
 
@@ -12,16 +8,9 @@ const Cerveceria = require("../models/cerveceria");
 exports.insertCerve = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    console.log(req.body);
     return res.status(400).json({ message: errors });
   }
-  console.log(req.body);
-  upload(req, res, (err) => {
-    if (err) {
-      return res.status(422).json({ message: err });
-    }
-    next(); // Revisarlo ********************
-  });
-
   try {
     let images = [];
     const {
@@ -39,8 +28,6 @@ exports.insertCerve = async (req, res, next) => {
     for (let pic of pictures) {
       images.push(pic.location);
     }
-    console.log(images);
-    // Aqui implementaremos la subida de imagenes, cuando tengamos un front end diseñado.************************************
     const cerve = new Cerveceria({
       picturesUrl: images,
       name: name,
